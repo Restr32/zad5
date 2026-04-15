@@ -5,7 +5,7 @@ namespace zad5.Controllers;
 [ApiController]
 [Route("[controller]")]
 
-public class SalController : ControllerBase {
+public class roomsController : ControllerBase {
     public static List<redRum> rooms = new List<redRum>
     {
         new redRum{id = 1, name = "B01", buildingCode = "B", floor = -1, capacity = 16, hasProjector = true, isActive = true},
