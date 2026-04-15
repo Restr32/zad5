@@ -30,6 +30,50 @@ public class SalController : ControllerBase {
 
         return Ok(room);
     }
-    
-    
+
+    [HttpGet("building/{buildingCode}")]
+    public IActionResult GetByBuilding(string buildingCode) {
+        var roomIn = rooms.Where(r => r.buildingCode.Equals(buildingCode, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        return Ok(roomIn);
+    }
+
+    [HttpPost]
+    public IActionResult Create(redRum tmpRoom) {
+        int tmpId = rooms.Any() ? rooms.Max(r => r.id)+1 : 1;
+        tmpRoom.id = tmpId;
+        
+        rooms.Add(tmpRoom);
+        return CreatedAtAction(nameof(GetById), new { id = tmpRoom.id }, tmpRoom);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, [FromBody] redRum tmpRoom) {
+        var livingRum = rooms.FirstOrDefault(r => r.id == id);
+        if (livingRum==null)
+        {
+            return NotFound();
+        }
+
+        livingRum.name = tmpRoom.name;
+        livingRum.buildingCode = tmpRoom.buildingCode;
+        livingRum.floor = tmpRoom.floor;
+        livingRum.capacity = tmpRoom.capacity;
+        livingRum.hasProjector = tmpRoom.hasProjector;
+        livingRum.isActive = tmpRoom.isActive;
+
+        return Ok(livingRum);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id) {
+        var tmpRoom = rooms.FirstOrDefault(r => r.id == id);
+        if (tmpRoom==null)
+        {
+            return NotFound();
+        }
+
+        rooms.Remove(tmpRoom);
+        return NoContent();
+    }
 }
